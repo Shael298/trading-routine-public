@@ -60,7 +60,7 @@ The discipline rules live in `CLAUDE.md`. The strategy (position sizing, hard ru
 
 ```bash
 # 1. Clone
-git clone https://github.com/YOUR_USERNAME/trading-routine-public.git
+git clone https://github.com/Shael298/trading-routine-public.git
 cd trading-routine-public
 
 # 2. Create .env (never committed)
