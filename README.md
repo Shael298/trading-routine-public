@@ -2,7 +2,7 @@
 
 This is an autonomous swing-trading agent I built that runs on a schedule, follows a committed rulebook, and keeps me updated over Telegram. It is currently running on a paper Alpaca account while I build up a track record before going live.
 
-Every single decision the agent makes gets committed to this git repo. If a routine did not push to `main`, it did not happen.
+Every single decision the agent makes gets committed to the private clone of this repo. If a routine did not push to `main`, it did not happen.
 
 ---
 
@@ -43,7 +43,7 @@ The discipline rules live in `CLAUDE.md`. The strategy (position sizing, hard ru
 - **Runtime:** Claude Code cloud routines (cron-triggered containers). All times are Europe/London.
 - **Persistence:** This git repo. Every routine commits before it exits.
 
-### Schedule
+### Claude Code Routines
 
 | Routine | Time (UK) | What it does |
 |---|---|---|
