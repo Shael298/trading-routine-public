@@ -1,0 +1,277 @@
+[
+  {
+    "name": "approve: clean Tier-1 buy",
+    "input": {
+      "symbol": "AAPL", "qty": 1, "price": 240.00,
+      "equity": 1000.00, "cash": 990.00,
+      "positions_count": 2, "weekly_trades": 1, "daytrade_count": 0,
+      "has_catalyst": true, "is_stock": true, "is_fractional": false
+    },
+    "approved": true,
+    "reasons": []
+  },
+  {
+    "name": "reject: not a stock",
+    "input": {
+      "symbol": "BTCUSD", "qty": 1, "price": 100.00,
+      "equity": 1000, "cash": 1000,
+      "positions_count": 0, "weekly_trades": 0, "daytrade_count": 0,
+      "has_catalyst": true, "is_stock": false, "is_fractional": false
+    },
+    "approved": false,
+    "reasons_contains": ["not-a-stock"]
+  },
+  {
+    "name": "reject: fractional share",
+    "input": {
+      "symbol": "AMZN", "qty": 1, "price": 100.00,
+      "equity": 1000, "cash": 1000,
+      "positions_count": 0, "weekly_trades": 0, "daytrade_count": 0,
+      "has_catalyst": true, "is_stock": true, "is_fractional": true
+    },
+    "approved": false,
+    "reasons_contains": ["fractional-not-allowed"]
+  },
+  {
+    "name": "reject: cost exceeds Tier-1 40% cap",
+    "input": {
+      "symbol": "COST", "qty": 1, "price": 500.00,
+      "equity": 1000, "cash": 1000,
+      "positions_count": 0, "weekly_trades": 0, "daytrade_count": 0,
+      "has_catalyst": true, "is_stock": true, "is_fractional": false
+    },
+    "approved": false,
+    "reasons_contains": ["tier-size-exceeded"]
+  },
+  {
+    "name": "reject: cost exceeds cash",
+    "input": {
+      "symbol": "X", "qty": 10, "price": 50.00,
+      "equity": 1000, "cash": 100,
+      "positions_count": 0, "weekly_trades": 0, "daytrade_count": 0,
+      "has_catalyst": true, "is_stock": true, "is_fractional": false
+    },
+    "approved": false,
+    "reasons_contains": ["insufficient-cash", "tier-size-exceeded"]
+  },
+  {
+    "name": "reject: max concurrent positions",
+    "input": {
+      "symbol": "F", "qty": 10, "price": 10.00,
+      "equity": 1000, "cash": 400,
+      "positions_count": 6, "weekly_trades": 0, "daytrade_count": 0,
+      "has_catalyst": true, "is_stock": true, "is_fractional": false
+    },
+    "approved": false,
+    "reasons_contains": ["positions-cap"]
+  },
+  {
+    "name": "reject: weekly trade cap reached (5/week)",
+    "input": {
+      "symbol": "F", "qty": 10, "price": 10.00,
+      "equity": 1000, "cash": 400,
+      "positions_count": 1, "weekly_trades": 5, "daytrade_count": 0,
+      "has_catalyst": true, "is_stock": true, "is_fractional": false
+    },
+    "approved": false,
+    "reasons_contains": ["weekly-trade-cap"]
+  },
+  {
+    "name": "approve: weekly cap headroom (4/5 used, 5th allowed)",
+    "input": {
+      "symbol": "F", "qty": 10, "price": 10.00,
+      "equity": 1000, "cash": 400,
+      "positions_count": 1, "weekly_trades": 4, "daytrade_count": 0,
+      "has_catalyst": true, "is_stock": true, "is_fractional": false
+    },
+    "approved": true,
+    "reasons": []
+  },
+  {
+    "name": "reject: PDT guard (daytrade_count=3)",
+    "input": {
+      "symbol": "F", "qty": 10, "price": 10.00,
+      "equity": 1000, "cash": 400,
+      "positions_count": 0, "weekly_trades": 0, "daytrade_count": 3,
+      "has_catalyst": true, "is_stock": true, "is_fractional": false
+    },
+    "approved": false,
+    "reasons_contains": ["pdt-guard"]
+  },
+  {
+    "name": "reject: malformed qty (non-integer)",
+    "input": {
+      "symbol": "AAPL", "qty": 1.5, "price": 200.00,
+      "equity": 1000, "cash": 1000,
+      "positions_count": 0, "weekly_trades": 0, "daytrade_count": 0,
+      "has_catalyst": true, "is_stock": true, "is_fractional": false
+    },
+    "approved": false,
+    "reasons_contains": ["malformed-qty"]
+  },
+  {
+    "name": "reject: malformed qty (zero)",
+    "input": {
+      "symbol": "AAPL", "qty": 0, "price": 200.00,
+      "equity": 1000, "cash": 1000,
+      "positions_count": 0, "weekly_trades": 0, "daytrade_count": 0,
+      "has_catalyst": true, "is_stock": true, "is_fractional": false
+    },
+    "approved": false,
+    "reasons_contains": ["malformed-qty"]
+  },
+  {
+    "name": "reject: no catalyst",
+    "input": {
+      "symbol": "NVDA", "qty": 1, "price": 120.00,
+      "equity": 1000, "cash": 1000,
+      "positions_count": 0, "weekly_trades": 0, "daytrade_count": 0,
+      "has_catalyst": false, "is_stock": true, "is_fractional": false
+    },
+    "approved": false,
+    "reasons_contains": ["no-catalyst"]
+  },
+  {
+    "name": "reject: many rules fail at once",
+    "input": {
+      "symbol": "COST", "qty": 1, "price": 900.00,
+      "equity": 1000, "cash": 10,
+      "positions_count": 6, "weekly_trades": 5, "daytrade_count": 5,
+      "has_catalyst": false, "is_stock": true, "is_fractional": true
+    },
+    "approved": false,
+    "reasons_contains": [
+      "fractional-not-allowed",
+      "tier-size-exceeded",
+      "insufficient-cash",
+      "positions-cap",
+      "weekly-trade-cap",
+      "pdt-guard",
+      "no-catalyst"
+    ]
+  },
+  {
+    "name": "approve: Tier-2 ($3k equity, 30% cap, $800 buy fits)",
+    "input": {
+      "symbol": "MSFT", "qty": 1, "price": 420.00,
+      "equity": 3000, "cash": 1500,
+      "positions_count": 2, "weekly_trades": 1, "daytrade_count": 0,
+      "has_catalyst": true, "is_stock": true, "is_fractional": false
+    },
+    "approved": true,
+    "reasons": []
+  },
+  {
+    "name": "reject: Tier-2 buy that would exceed 30% ($1000 > $900)",
+    "input": {
+      "symbol": "COST", "qty": 2, "price": 500.00,
+      "equity": 3000, "cash": 3000,
+      "positions_count": 0, "weekly_trades": 0, "daytrade_count": 0,
+      "has_catalyst": true, "is_stock": true, "is_fractional": false
+    },
+    "approved": false,
+    "reasons_contains": ["tier-size-exceeded"]
+  },
+  {
+    "name": "approve: Tier-3 ($10k equity, 20% cap, $1500 buy fits)",
+    "input": {
+      "symbol": "META", "qty": 2, "price": 550.00,
+      "equity": 10000, "cash": 5000,
+      "positions_count": 3, "weekly_trades": 2, "daytrade_count": 0,
+      "has_catalyst": true, "is_stock": true, "is_fractional": false
+    },
+    "approved": true,
+    "reasons": []
+  },
+  {
+    "name": "approve: pyramid add on proven winner (held 2×$80 PLTR, now +16%)",
+    "input": {
+      "symbol": "PLTR", "qty": 1, "price": 93.00,
+      "equity": 1000, "cash": 500,
+      "positions_count": 3, "weekly_trades": 2, "daytrade_count": 0,
+      "has_catalyst": true, "is_stock": true, "is_fractional": false,
+      "is_pyramid": true, "existing_shares": 2, "existing_cost_basis": 160,
+      "existing_unrealized_plpc": 0.1625
+    },
+    "approved": true,
+    "reasons": []
+  },
+  {
+    "name": "reject: pyramid but position not yet at +15%",
+    "input": {
+      "symbol": "PLTR", "qty": 1, "price": 88.00,
+      "equity": 1000, "cash": 500,
+      "positions_count": 3, "weekly_trades": 2, "daytrade_count": 0,
+      "has_catalyst": true, "is_stock": true, "is_fractional": false,
+      "is_pyramid": true, "existing_shares": 2, "existing_cost_basis": 160,
+      "existing_unrealized_plpc": 0.10
+    },
+    "approved": false,
+    "reasons_contains": ["pyramid-not-yet-winning"]
+  },
+  {
+    "name": "reject: pyramid add too large (holding 2, trying to add 2)",
+    "input": {
+      "symbol": "PLTR", "qty": 2, "price": 93.00,
+      "equity": 1000, "cash": 500,
+      "positions_count": 3, "weekly_trades": 2, "daytrade_count": 0,
+      "has_catalyst": true, "is_stock": true, "is_fractional": false,
+      "is_pyramid": true, "existing_shares": 2, "existing_cost_basis": 160,
+      "existing_unrealized_plpc": 0.1625
+    },
+    "approved": false,
+    "reasons_contains": ["pyramid-add-too-large"]
+  },
+  {
+    "name": "reject: pyramid but no existing position",
+    "input": {
+      "symbol": "PLTR", "qty": 1, "price": 93.00,
+      "equity": 1000, "cash": 500,
+      "positions_count": 3, "weekly_trades": 2, "daytrade_count": 0,
+      "has_catalyst": true, "is_stock": true, "is_fractional": false,
+      "is_pyramid": true, "existing_shares": 0, "existing_cost_basis": 0,
+      "existing_unrealized_plpc": 0
+    },
+    "approved": false,
+    "reasons_contains": ["pyramid-no-existing-position", "pyramid-not-yet-winning"]
+  },
+  {
+    "name": "reject: pyramid combined cost exceeds tier cap",
+    "input": {
+      "symbol": "NVDA", "qty": 1, "price": 140.00,
+      "equity": 1000, "cash": 500,
+      "positions_count": 3, "weekly_trades": 2, "daytrade_count": 0,
+      "has_catalyst": true, "is_stock": true, "is_fractional": false,
+      "is_pyramid": true, "existing_shares": 2, "existing_cost_basis": 280,
+      "existing_unrealized_plpc": 0.20
+    },
+    "approved": false,
+    "reasons_contains": ["tier-size-exceeded"]
+  },
+  {
+    "name": "approve: pyramid skips weekly cap (already at 5/5)",
+    "input": {
+      "symbol": "PLTR", "qty": 1, "price": 93.00,
+      "equity": 1000, "cash": 500,
+      "positions_count": 3, "weekly_trades": 5, "daytrade_count": 0,
+      "has_catalyst": true, "is_stock": true, "is_fractional": false,
+      "is_pyramid": true, "existing_shares": 2, "existing_cost_basis": 160,
+      "existing_unrealized_plpc": 0.1625
+    },
+    "approved": true,
+    "reasons": []
+  },
+  {
+    "name": "approve: pyramid skips positions-cap (already at max 6 positions)",
+    "input": {
+      "symbol": "PLTR", "qty": 1, "price": 93.00,
+      "equity": 1000, "cash": 500,
+      "positions_count": 6, "weekly_trades": 2, "daytrade_count": 0,
+      "has_catalyst": true, "is_stock": true, "is_fractional": false,
+      "is_pyramid": true, "existing_shares": 2, "existing_cost_basis": 160,
+      "existing_unrealized_plpc": 0.1625
+    },
+    "approved": true,
+    "reasons": []
+  }
+]

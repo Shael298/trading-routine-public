@@ -1,0 +1,17 @@
+# Normalize everything to LF — repo is authored on Windows but runs in Linux cloud.
+* text=auto eol=lf
+
+# Shell scripts MUST be LF or /usr/bin/env bash breaks in the cloud container.
+*.sh text eol=lf
+*.bash text eol=lf
+
+# JSON / Markdown / config — LF
+*.json text eol=lf
+*.md text eol=lf
+*.yml text eol=lf
+*.yaml text eol=lf
+
+# Binary guards
+*.png binary
+*.jpg binary
+*.pdf binary
