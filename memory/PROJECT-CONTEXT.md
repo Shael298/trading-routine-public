@@ -23,7 +23,7 @@ moving from paper → live").
 - **Broker**: Alpaca — paper account at `https://paper-api.alpaca.markets`, market data at `https://data.alpaca.markets`. All trading I/O goes through `scripts/alpaca.sh`.
 - **Research**: Tavily free tier. Falls back to Claude's built-in WebSearch if key missing or quota exhausted. All research I/O goes through `scripts/tavily.sh`.
 - **Notifications**: Telegram bot → the user's personal chat. All user-facing messages go through `scripts/telegram.sh`. Fallback: `memory/notification_fallback.log`.
-- **Runtime**: Claude Code cloud routines (cron-triggered ephemeral containers). Five weekday firings: pre-market (12:00), market-open (14:45), midday (18:00), daily-summary (21:05), Friday weekly-review (21:10). All times **Europe/London**.
+- **Runtime**: Claude Code cloud routines (cron-triggered ephemeral containers). Six weekday firings: pre-market (12:00), market-open (14:45), midday (18:00), earnings-risk-check (19:30), daily-summary (21:05), Friday weekly-review (21:10). All times **Europe/London**.
 - **Persistence**: Git — this repo on GitHub (private). Memory files in `main` are the single source of truth.
 
 ---

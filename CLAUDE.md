@@ -9,7 +9,7 @@ executed and logged.
 
 ## What this project is
 
-**Trading Routine** is a fully autonomous swing-trading agent that runs as five
+**Trading Routine** is a fully autonomous swing-trading agent that runs as six
 weekday cron-triggered cloud routines (Europe/London timezone), trades a paper
 Alpaca account, and commits every decision to git. Paper first. Live once the
 paper account passes the go-live bar defined in `TRADING-STRATEGY.md`.
@@ -183,8 +183,8 @@ close the position — never leave a half-done buy.
 
 ## Local development
 
-Outside the cloud routines, the operator runs things locally from
-`C:\Users\shael\Trading Routine`. The repo ships:
+Outside the cloud routines, the operator runs things locally from a local
+clone of this repo. The repo ships:
 
 - `scripts/tests/run-all.sh` — the full test harness, must stay green on
   every commit.
