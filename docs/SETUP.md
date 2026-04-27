@@ -68,18 +68,18 @@ Should print `Summary: N passed, 0 failed`. If `.env` is present the live-read t
 
 1. Open Claude Code → **Routines** → **New routine** (six total).
 2. For each routine:
-   - **Name:** `pre-market` / `market-open` / `midday` / `earnings-risk-check` / `daily-summary` / `weekly-review`.
+   - **Name:** `before-market-opening` / `market-opening` / `afternoon review` / `earnings-risk-check` / `EOD-summary` / `EOW-summary`.
    - **Schedule (Europe/London):**
-     - `pre-market`:          `0 12 * * 1-5`
-     - `market-open`:         `45 14 * * 1-5`
-     - `midday`:              `0 18 * * 1-5`
+     - `before-market-opening`: `0 12 * * 1-5`
+     - `market-opening`:        `45 14 * * 1-5`
+     - `afternoon review`:      `0 18 * * 1-5`
      - `earnings-risk-check`: `30 19 * * 1-5`
-     - `daily-summary`:       `5 21 * * 1-5`
-     - `weekly-review`:       `10 21 * * 5`
+     - `EOD-summary`:         `5 21 * * 1-5`
+     - `EOW-summary`:         `10 21 * * 5`
    - **Prompt:** copy the contents of `cloud-routines/<name>.md` verbatim.
    - **Environment variables:** inject every key from `.env` individually. Do **not** paste the entire `.env` file. The routine reads directly from `$ALPACA_API_KEY` etc. and must never create a `.env` file at runtime.
 3. **GitHub App access:** grant the Claude GitHub App write permission on this repo (GitHub → Settings → Applications). Routines clone, commit, and push.
-4. **Dry-run:** trigger `pre-market` manually from the Claude Code UI. Verify: commit lands on `main`, Telegram message arrives.
+4. **Dry-run:** trigger `before-market-opening` manually from the Claude Code UI. Verify: commit lands on `main`, Telegram message arrives.
 
 ---
 
@@ -140,7 +140,7 @@ Revoke the Claude GitHub App on this repo (GitHub → Settings → Applications)
 
 ## 6. Updating the strategy
 
-`memory/TRADING-STRATEGY.md` is edited **only** by the Friday weekly-review routine, and only when the grading trend justifies it (2 weeks ≤ C, or a single catastrophic week). Any manual edit should:
+`memory/TRADING-STRATEGY.md` is edited **only** by the Friday EOW-summary routine, and only when the grading trend justifies it (2 weeks ≤ C, or a single catastrophic week). Any manual edit should:
 
 1. Happen in the same commit as an entry in `memory/WEEKLY-REVIEW.md` explaining the change.
 2. Update the "Last reviewed" date at the top of `TRADING-STRATEGY.md`.

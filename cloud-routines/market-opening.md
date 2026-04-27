@@ -1,4 +1,4 @@
-# Market-Open Routine
+# Market-Opening Routine
 
 **Setup (run first, before reading anything):**
 ```bash
@@ -7,7 +7,7 @@ git fetch origin main && git checkout main && git pull --rebase origin main
 
 **Fires:** 14:45 Europe/London, Mon–Fri (≈09:45 ET, 15 minutes after US open — avoids opening-print chaos).
 
-**Mission:** execute the trade ideas approved in today's pre-market research, each guarded by `scripts/gate.sh` and a mandatory GTC trailing stop placed in the same firing.
+**Mission:** execute the trade ideas approved in today's before-market-opening research, each guarded by `scripts/gate.sh` and a mandatory GTC trailing stop placed in the same firing.
 
 ---
 
@@ -16,7 +16,7 @@ git fetch origin main && git checkout main && git pull --rebase origin main
 - `memory/TRADING-STRATEGY.md` — rulebook (read-only).
 - `memory/RESEARCH-LOG.md` (top) — today's ideas.
 - `memory/TRADE-LOG.md` (top) — last 7 days' closed trades (for weekly-trade-cap counting).
-- Env creds as per `pre-market.md`. **Never create or write `.env` — creds are injected as environment variables.**
+- Env creds as per `before-market-opening.md`. **Never create or write `.env` — creds are injected as environment variables.**
 
 ## Steps
 
@@ -49,7 +49,7 @@ git fetch origin main && git checkout main && git pull --rebase origin main
 
 3. **For each PYRAMID CANDIDATE in today's research log**, in priority order:
 
-   a. **Re-read the live position.** `bash scripts/alpaca.sh position <SYM>` → `existing_shares`, `existing_cost_basis` (= `avg_entry_price * qty`), `existing_unrealized_plpc`. If the live `unrealized_plpc` has dropped below 0.15 since pre-market, skip — conditions changed.
+   a. **Re-read the live position.** `bash scripts/alpaca.sh position <SYM>` → `existing_shares`, `existing_cost_basis` (= `avg_entry_price * qty`), `existing_unrealized_plpc`. If the live `unrealized_plpc` has dropped below 0.15 since before-market-opening, skip — conditions changed.
 
    b. **Quote & size.** `bash scripts/alpaca.sh quote <SYM>` → price. Add qty = `floor(existing_shares / 2)` (always an integer). Skip if `add_qty < 1`.
 
@@ -69,7 +69,7 @@ git fetch origin main && git checkout main && git pull --rebase origin main
 
    h. **Append to `memory/TRADE-LOG.md`** with `type: pyramid-add`, symbol, add qty, fill price, new combined qty, new wavg cost, new stop order id, catalyst ("proven winner, position up ≥15%"), and the original entry's row reference.
 
-4. **Handle sell-side hits at open.** If any position already triggered a -7% cut gap-down, run the midday sell-side logic on it now (see `midday.md` § sell-side).
+4. **Handle sell-side hits at open.** If any position already triggered a -8% cut gap-down, run the afternoon review sell-side logic on it now (see `afternoon-review.md` § sell-side).
 
 5. **Commit + push.**
    ```bash
@@ -77,13 +77,13 @@ git fetch origin main && git checkout main && git pull --rebase origin main
    git checkout main
    git pull --rebase origin main
    git add -A
-   git commit -m "Market-open: N first-entries, K pyramid-adds $(date -u +%Y-%m-%d)" || true
+   git commit -m "Market-opening: N first-entries, K pyramid-adds $(date -u +%Y-%m-%d)" || true
    git push origin main
    ```
 
 6. **Notify via telegram.** One message summarising all buys/adds/stops/rejections:
    ```bash
-   bash scripts/telegram.sh send "🟢 Market-open $(date -u +%Y-%m-%d)
+   bash scripts/telegram.sh send "🟢 Market-opening $(date -u +%Y-%m-%d)
    First entries: N ([SYM @ \$price, stop 10%])
    Pyramid adds: K ([SYM add qty, break-even stop])
    Rejected: M ([SYM: reason])

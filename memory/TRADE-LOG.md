@@ -3,7 +3,7 @@
 Every buy, sell, stop placement, stop cancel, and daily EOD snapshot lives here.
 Append-only. Newest entries at the **top** (reverse chronological).
 
-Written by: `market-open`, `midday`, `daily-summary`, `/trade` local command.
+Written by: `market-opening`, `afternoon review`, `EOD-summary`, `/trade` local command.
 
 ---
 
@@ -24,7 +24,7 @@ Each entry is a dated section. Two templates:
 - **Risk**: gap-down overnight through stop
 ```
 
-### Template: EOD snapshot (written by daily-summary routine at 21:05 UK)
+### Template: EOD snapshot (written by EOD-summary routine at 21:05 UK)
 
 ```
 ## 2026-04-21 EOD
@@ -45,4 +45,4 @@ Each entry is a dated section. Two templates:
 
 ## Seed
 
-No trades yet. First entry will appear above this line after the first market-open routine fires.
+No trades yet. First entry will appear above this line after the first market-opening routine fires.

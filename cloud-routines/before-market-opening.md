@@ -1,4 +1,4 @@
-# Pre-Market Routine
+# Before-Market-Opening Routine
 
 **Setup (run first, before reading anything):**
 ```bash
@@ -54,13 +54,13 @@ git fetch origin main && git checkout main && git pull --rebase origin main
    git checkout main
    git pull --rebase origin main
    git add -A
-   git commit -m "Pre-market research $(date -u +%Y-%m-%d)" || true
+   git commit -m "Before-market-opening research $(date -u +%Y-%m-%d)" || true
    git push origin main
    ```
 
 8. **Notify via telegram.**
    ```bash
-   bash scripts/telegram.sh send "📊 Pre-market $(date -u +%Y-%m-%d)
+   bash scripts/telegram.sh send "📊 Before-market-opening $(date -u +%Y-%m-%d)
    Equity: \$X
    Open positions: N
    First-entry ideas: M ([symbols])
@@ -69,9 +69,9 @@ git fetch origin main && git checkout main && git pull --rebase origin main
 
 ## Guardrails
 
-- **No orders.** This routine does not call `alpaca.sh buy`, `stop`, `close`, or `cancel`. Those belong to market-open and midday.
+- **No orders.** This routine does not call `alpaca.sh buy`, `stop`, `close`, or `cancel`. Those belong to market-opening and afternoon review.
 - **Fail-closed on broker.** If `alpaca.sh account` fails, commit a minimal research entry noting the outage, notify, and exit 0.
-- **Fail-open on telegram.** If `telegram.sh` writes to the fallback log, do not retry — the daily-summary routine will surface it.
+- **Fail-open on telegram.** If `telegram.sh` writes to the fallback log, do not retry — the EOD-summary routine will surface it.
 - **Timezone discipline.** All timestamps written to memory are in UTC (use `date -u`) or explicitly marked UK.
 
 ## Exit criteria

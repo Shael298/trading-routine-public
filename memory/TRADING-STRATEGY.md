@@ -1,10 +1,10 @@
 # Trading Strategy — Rulebook
 
-The authoritative rulebook every routine obeys. The Friday weekly-review routine is
+The authoritative rulebook every routine obeys. The Friday EOW-summary routine is
 the **only** routine permitted to edit this file, and only when a rule has proven
 itself 2+ weeks or failed badly. All other routines treat this file as read-only.
 
-**Last reviewed:** 2026-04-22 (added pyramid rule + constructive-pullback preference; weekly cap 3→5)
+**Last reviewed:** 2026-04-27 (renamed cloud routines and updated sell-side cut/tighten thresholds)
 
 ---
 
@@ -37,7 +37,7 @@ smaller names and learn on lower risk.
 
 Rules 1–8, 12, and 13 are enforced *inside* `scripts/gate.sh` at buy time (pure
 function, stdin → stdout). Rules 7–11 are cross-trade or post-fill concerns
-— they're enforced by the **market-open** and **midday** cloud routines,
+— they're enforced by the **market-opening** and **afternoon review** cloud routines,
 not by gate.sh, because they need state the gate payload doesn't carry
 (fill confirmations, sector history, live stop-order ids).
 
@@ -48,8 +48,8 @@ not by gate.sh, because they need state the gate payload doesn't carry
 5. **Weekly new-trade cap.** Max **5 new trades per week** (Mon–Fri rolling, measured at gate time). Pyramid adds **do not** count against this cap — they are not new trades.
 6. **Deployment target.** Target **75–85%** of equity deployed. Outside that band, research log should flag it.
 7. **Trailing stop on entry.** Every filled buy ⇒ immediately place **10% trailing stop** as a **real GTC order** on Alpaca. No mental stops. No synthetic stops.
-8. **Cut at -7%.** If P&L ≤ -7% from entry, manual market sell + cancel trail. Don't wait for trail to catch up.
-9. **Tighten on winners.** Up ≥ 15% → tighten trailing stop to 7%. Up ≥ 20% → tighten to 5%.
+8. **Cut at -8%.** If P&L ≤ -8% from entry, manual market sell + cancel trail. Don't wait for trail to catch up.
+9. **Tighten on winners.** Up ≥ 14% → tighten trailing stop to 7%. Up ≥ 18% → tighten to 5%.
 10. **Never worsen a stop.** Never move a stop down. Never tighten within 3% of current price (instant-fill risk).
 11. **Sector kill-switch.** After **2 consecutive failed trades in a sector**, exit the entire sector and flag in research log.
 12. **PDT guard.** On accounts < $25k, `daytrade_count` must be **< 3** before any buy (preserves headroom for same-day exit).
@@ -116,9 +116,9 @@ but the catalyst is strong, document the override in the research log. If a
 trade fails the fundamentals test, strongly reconsider — fundamental weakness
 plus technical weakness = no trade.
 
-The research routines (`pre-market`, `idea`) compute pullback % and 50-day MA
+The research routines (`before-market-opening`, `idea`) compute pullback % and 50-day MA
 status for every candidate and log them in `RESEARCH-LOG.md` alongside the
-catalyst. `market-open` refuses to execute an idea whose research entry doesn't
+catalyst. `market-opening` refuses to execute an idea whose research entry doesn't
 contain either a constructive-pullback datapoint or an explicit override note.
 
 Pyramid adds are **exempt** from this preference — the +15% unrealized gain is
@@ -126,20 +126,20 @@ its own proof of strength, and an add by definition isn't a first entry.
 
 ---
 
-## Sell-side Logic (midday + opportunistic)
+## Sell-side Logic (afternoon review + opportunistic)
 
 Evaluated in order. First match wins.
 
-1. **P&L ≤ -7% from entry** → market sell + cancel trail + log exit (`reason: stop-loss-cut`).
+1. **P&L ≤ -8% from entry** → market sell + cancel trail + log exit (`reason: stop-loss-cut`).
 2. **Thesis broken** (catalyst reversed, sector kill-switch fired, material news against) → market sell + cancel trail + log exit (`reason: thesis-broken`).
-3. **Up ≥ 20%** → tighten trailing stop to 5% (cancel + recreate). Never within 3% of current price.
-4. **Up ≥ 15%** → tighten trailing stop to 7% (cancel + recreate). Never within 3% of current price.
+3. **Up ≥ 18%** → tighten trailing stop to 5% (cancel + recreate). Never within 3% of current price.
+4. **Up ≥ 14%** → tighten trailing stop to 7% (cancel + recreate). Never within 3% of current price.
 5. **Sector has 2 consecutive failures** → flat the entire sector + 2-week cooldown.
 
 For positions that have been pyramided, sell-side rules apply to the *combined*
 position. The fixed break-even stop placed at pyramid time remains in force
 until the position either stops out (P&L ≈ 0, logged `pyramid-break-even-stop`)
-or hits +20% from weighted-average cost — at which point rule 3 converts the
+or hits +18% from weighted-average cost — at which point rule 3 converts the
 fixed stop to a 5% trailing stop and normal winner-tighten mechanics resume.
 
 ---

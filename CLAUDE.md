@@ -48,7 +48,8 @@ The human operator is Shael (`<your-email@example.com>`). The agent is you.
 
 ## Workflow every routine follows
 
-Every routine — pre-market, market-open, midday, daily-summary, weekly-review —
+Every routine — before-market-opening, market-opening, afternoon review,
+earnings-risk-check, EOD-summary, EOW-summary —
 executes the same five-beat loop:
 
 1. **read memory.** Load `PROJECT-CONTEXT.md`, `TRADING-STRATEGY.md`, and the
@@ -90,10 +91,10 @@ All memory lives in `memory/` and is read on every routine boot.
 | File | Role | Write discipline |
 |---|---|---|
 | `PROJECT-CONTEXT.md` | Mission, platform, invariants. Rarely changes. | **read-only** to routines. Edit only when platform assumptions genuinely change. |
-| `TRADING-STRATEGY.md` | Rulebook — tier table, hard rules, buy-side gate, sell-side logic. | **read-only** to every routine except the Friday **weekly-review** routine, which may edit it only when a rule has proven itself 2+ consecutive weeks or failed badly (record the amendment in the same commit). |
+| `TRADING-STRATEGY.md` | Rulebook — tier table, hard rules, buy-side gate, sell-side logic. | **read-only** to every routine except the Friday **EOW-summary** routine, which may edit it only when a rule has proven itself 2+ consecutive weeks or failed badly (record the amendment in the same commit). |
 | `TRADE-LOG.md` | Every trade + every EOD snapshot. | **append-only**, newest at top. Never delete or amend past entries. |
 | `RESEARCH-LOG.md` | Daily research — account snapshot, market context, trade ideas. | **append-only**, newest at top. |
-| `WEEKLY-REVIEW.md` | Weekly A–F grade + lessons. | **append-only**, newest at top. Written only by the weekly-review routine. |
+| `WEEKLY-REVIEW.md` | Weekly A–F grade + lessons. | **append-only**, newest at top. Written only by the EOW-summary routine. |
 
 Append-only means: add a new dated section at the top, never edit historical
 entries. If a fact needs correcting, write a new entry saying so — the ledger
@@ -107,12 +108,12 @@ Six weekday firings (all times **Europe/London**):
 
 | Routine | Time | Purpose |
 |---|---|---|
-| **pre-market**          | 12:00      | Research log: account snapshot, market context, 0–5 candidate ideas. No orders. |
-| **market-open**         | 14:45      | Execute approved ideas via `gate.sh` + `alpaca.sh buy` + mandatory trailing stop. Close sell-side hits. |
-| **midday**              | 18:00      | Check open positions against sell-side logic (cut/tighten/thesis). Place any required stop-tighten orders. |
+| **before-market-opening** | 12:00    | Research log: account snapshot, market context, 0–5 candidate ideas. No orders. |
+| **market-opening**      | 14:45      | Execute approved ideas via `gate.sh` + `alpaca.sh buy` + mandatory trailing stop. Close sell-side hits. |
+| **afternoon review**    | 18:00      | Check open positions against sell-side logic (cut/tighten/thesis). Place any required stop-tighten orders. |
 | **earnings-risk-check** | 19:30      | Flag any open position with earnings/binary event within 2 trading days. No orders — flags only. |
-| **daily-summary**       | 21:05      | EOD snapshot into `TRADE-LOG.md`, Telegram summary. Clean up any dangling orders. |
-| **weekly-review**       | Fri 21:10  | Grade the week (A–F), write `WEEKLY-REVIEW.md` entry, propose strategy amendments if 2 weeks ≤ C. |
+| **EOD-summary**         | 21:05      | EOD snapshot into `TRADE-LOG.md`, Telegram summary. Clean up any dangling orders. |
+| **EOW-summary**         | Fri 21:10  | Grade the week (A–F), write `WEEKLY-REVIEW.md` entry, propose strategy amendments if 2 weeks ≤ C. |
 
 Each routine's full prompt lives in `cloud-routines/<name>.md`. That file is
 copy-pasted into the Claude Code cloud routine config.
@@ -171,7 +172,7 @@ close the position — never leave a half-done buy.
 ## What you are not allowed to do
 
 - Create `.env`, write secrets to any file, or log credentials.
-- Edit `TRADING-STRATEGY.md` outside the Friday weekly-review routine.
+- Edit `TRADING-STRATEGY.md` outside the Friday EOW-summary routine.
 - Delete or edit historical log entries.
 - Submit any order the gate rejects.
 - Submit a buy without queueing its trailing stop in the same firing.

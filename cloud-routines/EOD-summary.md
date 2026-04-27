@@ -1,4 +1,4 @@
-# Daily Summary Routine
+# EOD Summary Routine
 
 **Setup (run first, before reading anything):**
 ```bash
@@ -16,7 +16,7 @@ git fetch origin main && git checkout main && git pull --rebase origin main
 - `memory/TRADE-LOG.md` — previous snapshots.
 - `memory/RESEARCH-LOG.md` (today) — what happened.
 - `memory/notification_fallback.log` (if present) — queued Telegram messages.
-- Env creds as per `pre-market.md`. **Never create or write `.env` — creds are injected as environment variables.**
+- Env creds as per `before-market-opening.md`. **Never create or write `.env` — creds are injected as environment variables.**
 
 ## Steps
 
@@ -70,4 +70,4 @@ git fetch origin main && git checkout main && git pull --rebase origin main
 - Every open position is backed by a live GTC stop.
 - `notification_fallback.log` is empty or nonexistent (drained).
 - Git push succeeded.
-- Telegram summary delivered (or fallback log updated — the *next* daily-summary will drain it).
+- Telegram summary delivered (or fallback log updated — the *next* EOD-summary will drain it).

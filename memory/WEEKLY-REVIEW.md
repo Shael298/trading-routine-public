@@ -1,7 +1,7 @@
 # Weekly Review
 
-Friday 21:10 UK, after the daily-summary routine. Reviews the full trading week and
-assigns a **Grade A–F**. If a grade ≤ C repeats 2 weeks, the weekly-review routine
+Friday 21:10 UK, after the EOD-summary routine. Reviews the full trading week and
+assigns a **Grade A–F**. If a grade ≤ C repeats 2 weeks, the EOW-summary routine
 must propose a concrete rule change in `TRADING-STRATEGY.md` in the same commit.
 
 Append-only, newest at the **top**.
@@ -55,4 +55,4 @@ A "rule violation" is measured against `TRADING-STRATEGY.md` as-of the start of 
 ## Seed
 
 No weeks reviewed yet. First entry will appear above this line after the first
-Friday weekly-review routine fires.
+Friday EOW-summary routine fires.

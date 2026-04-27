@@ -1,11 +1,11 @@
-# Weekly-Review Routine
+# EOW Summary Routine
 
 **Setup (run first, before reading anything):**
 ```bash
 git fetch origin main && git checkout main && git pull --rebase origin main
 ```
 
-**Fires:** Friday 21:10 Europe/London (5 minutes after the Friday daily-summary). Runs once per week.
+**Fires:** Friday 21:10 Europe/London (5 minutes after the Friday EOD-summary). Runs once per week.
 
 **Mission:** grade the trading week A–F against `memory/WEEKLY-REVIEW.md` § Grading scale, record what worked and what didn't, and — only when justified — propose a concrete rule change to `memory/TRADING-STRATEGY.md` in the same commit.
 
@@ -17,7 +17,7 @@ git fetch origin main && git checkout main && git pull --rebase origin main
 - `memory/TRADE-LOG.md` — every trade and EOD snapshot this week.
 - `memory/TRADING-STRATEGY.md` — the rulebook (this is the only routine allowed to edit it).
 - `memory/RESEARCH-LOG.md` — week's ideas and rejections.
-- Env creds as per `pre-market.md`. **Never create or write `.env` — creds are injected as environment variables.**
+- Env creds as per `before-market-opening.md`. **Never create or write `.env` — creds are injected as environment variables.**
 
 ## Steps
 
@@ -51,13 +51,13 @@ git fetch origin main && git checkout main && git pull --rebase origin main
    git checkout main
    git pull --rebase origin main
    git add -A
-   git commit -m "Weekly review $(date +%G-W%V) · Grade X · [change summary]" || true
+   git commit -m "EOW summary $(date +%G-W%V) · Grade X · [change summary]" || true
    git push origin main
    ```
 
 8. **Notify via telegram.** One message:
    ```bash
-   bash scripts/telegram.sh send "📈 Weekly review $(date +%G-W%V)
+   bash scripts/telegram.sh send "📈 EOW summary $(date +%G-W%V)
    Grade: X
    P&L: ±N.N% (vs SPY ±N pp)
    Trades: W wins / L losses

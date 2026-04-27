@@ -7,15 +7,15 @@ git fetch origin main && git checkout main && git pull --rebase origin main
 
 **Fires:** 19:30 Europe/London, Mon–Fri (≈14:30 ET, mid-afternoon).
 
-**Mission:** detect scheduled binary events (earnings, FDA decisions, macro data) within 2 trading days for every open position and flag them before daily-summary so the operator can decide to hold, trim, or close ahead of the event.
+**Mission:** detect scheduled binary events (earnings, FDA decisions, macro data) within 2 trading days for every open position and flag them before EOD-summary so the operator can decide to hold, trim, or close ahead of the event.
 
 ---
 
 ## Inputs
 
 - `memory/TRADE-LOG.md` — open positions and original thesis.
-- `memory/RESEARCH-LOG.md` (today's entry if pre-market has already run) — for context.
-- Env creds as per `pre-market.md`. **Never create or write `.env` — creds are injected as environment variables.**
+- `memory/RESEARCH-LOG.md` (today's entry if before-market-opening has already run) — for context.
+- Env creds as per `before-market-opening.md`. **Never create or write `.env` — creds are injected as environment variables.**
 
 ## Steps
 
@@ -45,7 +45,7 @@ git fetch origin main && git checkout main && git pull --rebase origin main
    | `🟡 BINARY EVENT 3–5 days` | Earnings / catalyst scheduled within 3–5 trading days |
    | `🟢 clear` | No scheduled binary event found in next 5 trading days |
 
-4. **Append a block to today's `RESEARCH-LOG.md`** (at the top of today's section, or as a new dated section if pre-market hasn't run):
+4. **Append a block to today's `RESEARCH-LOG.md`** (at the top of today's section, or as a new dated section if before-market-opening hasn't run):
 
    ```
    ## Earnings Risk Check — YYYY-MM-DD HH:MM UTC
@@ -58,7 +58,7 @@ git fetch origin main && git checkout main && git pull --rebase origin main
 
    Recommendation logic:
    - `🔴` → **"Close or trim before event — binary risk unacceptable under strategy rules."**
-   - `🟡` → **"Monitor — consider trimming if position is at risk; raise awareness at pre-market tomorrow."**
+   - `🟡` → **"Monitor — consider trimming if position is at risk; raise awareness at before-market-opening tomorrow."**
    - `🟢` → **"No action."**
 
 5. **Commit + push.**
@@ -82,7 +82,7 @@ git fetch origin main && git checkout main && git pull --rebase origin main
 
 ## Guardrails
 
-- **This routine flags; it does not trade.** No orders, no stops, no closes. Decisions are the operator's (or the market-open routine's) to execute.
+- **This routine flags; it does not trade.** No orders, no stops, no closes. Decisions are the operator's (or the market-opening routine's) to execute.
 - **Uncertainty is a 🟡.** If search results are ambiguous about whether an event falls within the window, err on the side of flagging.
 - **Gap risk is the concern.** Earnings after-hours or pre-market can gap through a trailing stop. The flag exists to prompt a deliberate hold/close decision, not to force a close.
 

@@ -16,7 +16,7 @@
 # Design note: the silent-fallback-exit-0 rule is deliberate. A 21:05 routine
 # firing that can't reach Telegram must still commit its memory updates and
 # exit cleanly. The fallback log is read by the next routine and surfaced in
-# the daily summary, so nothing is lost.
+# the EOD-summary, so nothing is lost.
 
 set -u
 

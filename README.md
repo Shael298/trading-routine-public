@@ -39,7 +39,7 @@ The discipline rules live in `CLAUDE.md`. The strategy (position sizing, hard ru
 
 - **Broker:** Alpaca paper account at `https://paper-api.alpaca.markets`.
 - **Research:** Tavily (free tier). Falls back to Claude's `WebSearch` on exit code 3.
-- **Notifications:** Telegram bot. The fallback log at `memory/notification_fallback.log` gets drained by the daily-summary routine.
+- **Notifications:** Telegram bot. The fallback log at `memory/notification_fallback.log` gets drained by the EOD-summary routine.
 - **Runtime:** Claude Code cloud routines (cron-triggered containers). All times are Europe/London.
 - **Persistence:** This git repo. Every routine commits before it exits.
 
@@ -47,12 +47,12 @@ The discipline rules live in `CLAUDE.md`. The strategy (position sizing, hard ru
 
 | Routine | Time (UK) | What it does |
 |---|---|---|
-| pre-market | 12:00 | Writes the research log entry: account snapshot, market context, 0 to 3 trade ideas. No orders placed. |
-| market-open | 14:45 | Executes approved ideas. First entries get a 10% trailing stop. Pyramid adds get a fixed break-even stop at the weighted-average cost basis. |
-| midday | 18:00 | Runs sell-side logic: cuts losses at -7%, tightens trails on winners at +15% and +20%, and checks if the thesis still holds. |
+| before-market-opening | 12:00 | Writes the research log entry: account snapshot, market context, 0 to 3 trade ideas. No orders placed. |
+| market-opening | 14:45 | Executes approved ideas. First entries get a 10% trailing stop. Pyramid adds get a fixed break-even stop at the weighted-average cost basis. |
+| afternoon review | 18:00 | Runs sell-side logic: cuts losses at -8%, tightens trails on winners at +14% and +18%, and checks if the thesis still holds. |
 | earnings-risk-check | 19:30 | Scans every open position for earnings or other binary events within 5 trading days and flags them in the research log. No orders placed. |
-| daily-summary | 21:05 | Takes an end-of-day snapshot, drains the Telegram fallback log, and sends a daily summary. |
-| weekly-review | Fri 21:10 | Grades the week A to F and proposes strategy changes if two consecutive weeks score C or below. |
+| EOD-summary | 21:05 | Takes an end-of-day snapshot, drains the Telegram fallback log, and sends a daily summary. |
+| EOW-summary | Fri 21:10 | Grades the week A to F and proposes strategy changes if two consecutive weeks score C or below. |
 
 ---
 
@@ -97,7 +97,7 @@ These work inside Claude Code (CLI or IDE):
 | `/buy <SYM> --pyramid` | Pyramid add into an existing winner (requires +15% or more). Cancels the old stop, buys a half-size add, and places a fixed break-even stop. |
 | `/close <SYM>` | Cancels the stop, market-closes the position, logs it, and notifies. |
 | `/research <query>` | Tavily search with `WebSearch` fallback. |
-| `/review` | Manual weekly-review preview. Read-only, does not commit. |
+| `/review` | Manual EOW-summary preview. Read-only, does not commit. |
 
 ---
 
@@ -129,7 +129,7 @@ To stop every future routine in one click, revoke the Claude GitHub App on this 
 `memory/` is the single source of truth. Split by role:
 
 - `PROJECT-CONTEXT.md` - mission and platform invariants. Rarely changes.
-- `TRADING-STRATEGY.md` - the rulebook. Only the weekly-review routine can edit this.
+- `TRADING-STRATEGY.md` - the rulebook. Only the EOW-summary routine can edit this.
 - `TRADE-LOG.md` - every trade and end-of-day snapshot. Append-only, newest first.
 - `RESEARCH-LOG.md` - daily research entries. Append-only, newest first.
 - `WEEKLY-REVIEW.md` - weekly grade and lessons. Append-only, newest first.

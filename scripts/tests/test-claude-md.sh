@@ -43,11 +43,11 @@ assert_file_contains "$CM" "fail.closed"                             "CLAUDE.md:
 assert_file_contains "$CM" "fail.open"                               "CLAUDE.md: telegram fails open (silent fallback)"
 
 # Routine topology.
-assert_file_contains "$CM" "pre-market"                              "CLAUDE.md names pre-market routine"
-assert_file_contains "$CM" "market-open"                             "CLAUDE.md names market-open routine"
-assert_file_contains "$CM" "midday"                                  "CLAUDE.md names midday routine"
-assert_file_contains "$CM" "daily-summary"                           "CLAUDE.md names daily-summary routine"
-assert_file_contains "$CM" "weekly-review"                           "CLAUDE.md names weekly-review routine"
+assert_file_contains "$CM" "before-market-opening"                   "CLAUDE.md names before-market-opening routine"
+assert_file_contains "$CM" "market-opening"                          "CLAUDE.md names market-opening routine"
+assert_file_contains "$CM" "afternoon review"                        "CLAUDE.md names afternoon review routine"
+assert_file_contains "$CM" "EOD-summary"                             "CLAUDE.md names EOD-summary routine"
+assert_file_contains "$CM" "EOW-summary"                             "CLAUDE.md names EOW-summary routine"
 assert_file_contains "$CM" "earnings-risk-check"                     "CLAUDE.md names earnings-risk-check routine"
 
 # Kill switch.

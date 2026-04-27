@@ -1,14 +1,14 @@
 # Research Log
 
-One dated entry per trading day. Written by the **pre-market** cloud routine at
-12:00 UK (with an optional midday addendum if something material breaks). Read by
-market-open and weekly-review.
+One dated entry per trading day. Written by the **before-market-opening** cloud routine at
+12:00 UK (with an optional afternoon review addendum if something material breaks). Read by
+market-opening and EOW-summary.
 
 Append-only, newest at the **top**.
 
 ---
 
-## Entry schema (every pre-market entry must have these three subsections)
+## Entry schema (every before-market-opening entry must have these three subsections)
 
 ### Account Snapshot
 - **Equity**, **cash**, **buying power**, **deployment %**, **positions held**, **open orders**.
@@ -26,11 +26,11 @@ Append-only, newest at the **top**.
 ### Trade Ideas
 - Up to 3 ideas. Each one has: `symbol`, `catalyst` (why buy today), `entry` (price zone), `stop` (10% trail from entry), `target` (optional), `decision` (default **HOLD** unless the catalyst is clean and live).
 - Tickers structurally excluded by tier sizing must **not** appear as ideas.
-- `decision: BUY` carries a commitment: market-open will try to execute it provided all gate checks still pass.
+- `decision: BUY` carries a commitment: market-opening will try to execute it provided all gate checks still pass.
 
 ---
 
 ## Seed
 
-Research will begin with the first pre-market routine firing. Entries land above
+Research will begin with the first before-market-opening routine firing. Entries land above
 this line.
