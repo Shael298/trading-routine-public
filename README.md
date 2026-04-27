@@ -1,6 +1,6 @@
 # Trading Routine
 
-This is an autonomous swing-trading agent I built that runs on a schedule, follows a committed rulebook, and keeps me updated over Telegram. It is currently running on a paper Alpaca account while I build up a track record before going live.
+This is an autonomous swing trading agent I built using Alpaca and Tavily that runs on crons, follows a committed rulebook, and keeps me updated over Telegram. It is currently running on a paper Alpaca account while I build up a track record before going live.
 
 Every single decision the agent makes gets committed to the private clone of this repo. If a routine did not push to `main`, it did not happen.
 
