@@ -108,7 +108,7 @@ See `docs/SETUP.md` for the full walkthrough. The short version:
 1. In Claude Code cloud, create six routines using the prompts in `cloud-routines/`.
 2. Inject `ALPACA_API_KEY`, `ALPACA_SECRET_KEY`, `TAVILY_API_KEY`, `TELEGRAM_BOT_TOKEN`, `TELEGRAM_CHAT_ID`, and `GITHUB_TOKEN` as environment variables on each routine. Never let a routine create a `.env` file.
 3. Set the schedule per the table above (Europe/London timezone).
-4. Grant the Claude GitHub App write access so routines can push to `main`.
+4. Grant the Claude GitHub App write access to this repo so routines can push to `main`.
 
 ---
 
